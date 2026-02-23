@@ -1,1 +1,0 @@
-# User and Group admin are registered in log_in_app.admin (autodiscovered).

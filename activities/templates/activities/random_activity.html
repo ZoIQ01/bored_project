@@ -1,0 +1,43 @@
+{% extends "activities/base.html" %}
+
+{% block title %}Random activity{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+	<div class="col-12 col-lg-8">
+		<h1 class="h3 mb-3">Here’s a random activity for you</h1>
+
+		{% if no_activities %}
+			<div class="alert alert-warning" role="alert">
+				No activities available.
+			</div>
+		{% else %}
+			<div class="card shadow-sm mb-3">
+				<div class="card-body">
+					<h2 class="h5 card-title">{{ activity.activity }}</h2>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item px-0"><strong>ID:</strong> {{ activity.id }}</li>
+						<li class="list-group-item px-0"><strong>Type:</strong> {{ activity.type }}</li>
+						<li class="list-group-item px-0"><strong>Participants:</strong> {{ activity.participants }}</li>
+						<li class="list-group-item px-0"><strong>Price:</strong> {{ activity.price }}</li>
+						<li class="list-group-item px-0"><strong>Accessibility:</strong> {{ activity.accessibility }}</li>
+						<li class="list-group-item px-0">
+							<strong>Link:</strong>
+							{% if activity.link %}
+								<a href="{{ activity.link }}" target="_blank" rel="noopener noreferrer">{{ activity.link }}</a>
+							{% else %}
+								<span class="text-muted">—</span>
+							{% endif %}
+						</li>
+					</ul>
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="d-flex flex-wrap gap-2">
+			<a class="btn btn-primary" href="{% url 'random_activity' %}">Get Another Random Activity</a>
+			<a class="btn btn-outline-secondary" href="{% url 'activities_list' %}">Back to Activities List</a>
+		</div>
+	</div>
+</div>
+{% endblock %}

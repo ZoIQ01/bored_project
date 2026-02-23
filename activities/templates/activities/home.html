@@ -1,0 +1,17 @@
+{% extends "activities/base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="p-4 p-md-5 mb-4 bg-white border rounded-3 shadow-sm">
+	<h1 class="display-6 fw-bold mb-3">Welcome to Bored Activities</h1>
+	<p class="lead text-secondary mb-4">
+		Browse fun ideas, filter and sort results, import fresh activities, or get one random suggestion instantly.
+	</p>
+	<div class="d-flex flex-wrap gap-2">
+		<a class="btn btn-primary" href="{% url 'activities_list' %}">Browse Activities</a>
+		<a class="btn btn-outline-primary" href="{% url 'random_activity' %}">Pick Random</a>
+		<a class="btn btn-outline-secondary" href="{% url 'import_activities_view' %}">Import Data</a>
+	</div>
+</div>
+{% endblock %}

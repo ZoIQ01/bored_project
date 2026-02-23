@@ -1,0 +1,29 @@
+{% extends "activities/base.html" %}
+
+{% block title %}Activity {{ activity.id }}{% endblock %}
+
+{% block content %}
+<p class="mb-3"><a class="btn btn-outline-secondary btn-sm" href="{% url 'activities_list' %}">← Back to activities</a></p>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h1 class="h4 mb-3">Activity {{ activity.id }}</h1>
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><strong>Activity:</strong> {{ activity.activity }}</li>
+      <li class="list-group-item"><strong>Type:</strong> {{ activity.type }}</li>
+      <li class="list-group-item"><strong>Participants:</strong> {{ activity.participants }}</li>
+      <li class="list-group-item"><strong>Price:</strong> {{ activity.price }}</li>
+      <li class="list-group-item"><strong>Accessibility:</strong> {{ activity.accessibility }}</li>
+      <li class="list-group-item">
+        <strong>Link:</strong>
+        {% if activity.link %}
+          <a href="{{ activity.link }}" target="_blank" rel="noopener noreferrer">{{ activity.link }}</a>
+        {% else %}
+          —
+        {% endif %}
+      </li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

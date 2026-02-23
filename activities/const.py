@@ -1,0 +1,4 @@
+BORED_API_URL = "https://bored-api.appbrewery.com/random"
+DEFAULT_IMPORT_TIMEOUT = 5
+DEFAULT_IMPORT_COUNT = 20
+MAX_IMPORT_COUNT = 100

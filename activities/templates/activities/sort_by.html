@@ -1,0 +1,45 @@
+<form method="get" action="{% url 'activities_list' %}" class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h2 class="h6 mb-3">Sorting</h2>
+  {% if request.GET.type %}
+    <input type="hidden" name="type" value="{{ request.GET.type }}">
+  {% endif %}
+  {% if request.GET.participants %}
+    <input type="hidden" name="participants" value="{{ request.GET.participants }}">
+  {% endif %}
+  {% if request.GET.price %}
+    <input type="hidden" name="price" value="{{ request.GET.price }}">
+  {% endif %}
+  {% if request.GET.accessibility %}
+    <input type="hidden" name="accessibility" value="{{ request.GET.accessibility }}">
+  {% endif %}
+  {% if request.GET.activity %}
+    <input type="hidden" name="activity" value="{{ request.GET.activity }}">
+  {% endif %}
+  <div class="row g-3 align-items-end">
+    <div class="col-12 col-md-4 col-lg-3">
+      <label class="form-label" for="id_sort_by">Sort by</label>
+      <select class="form-select" name="sort_by" id="id_sort_by">
+        <option value="id" {% if request.GET.sort_by == "id" %}selected{% endif %}>id</option>
+        <option value="type" {% if request.GET.sort_by == "type" %}selected{% endif %}>type</option>
+        <option value="participants" {% if request.GET.sort_by == "participants" %}selected{% endif %}>participants</option>
+        <option value="price" {% if request.GET.sort_by == "price" %}selected{% endif %}>price</option>
+        <option value="accessibility" {% if request.GET.sort_by == "accessibility" %}selected{% endif %}>accessibility</option>
+        <option value="activity" {% if request.GET.sort_by == "activity" %}selected{% endif %}>activity</option>
+      </select>
+    </div>
+
+    <div class="col-12 col-md-4 col-lg-3">
+      <label class="form-label" for="id_order">Order</label>
+      <select class="form-select" name="order" id="id_order">
+        <option value="asc" {% if request.GET.order == "asc" %}selected{% endif %}>ascending</option>
+        <option value="desc" {% if request.GET.order == "desc" %}selected{% endif %}>descending</option>
+      </select>
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+      <button type="submit" class="btn btn-primary">Apply Sorting</button>
+    </div>
+  </div>
+  </div>
+</form>
