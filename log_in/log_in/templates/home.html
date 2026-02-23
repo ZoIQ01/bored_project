@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <h1 class="mb-3">Welcome{% if user.is_authenticated %}, {{ user.username }}{% endif %}!</h1>
+        <p class="lead mb-4">
+            This is the home page of your authentication demo project.
+        </p>
+        
+        <a href="{% url 'logout' %}">Logout</a>
+
+
+        {% if user.is_authenticated %}
+            <p class="mb-3">You are logged in and can now use protected features.</p>
+        {% else %}
+            <p class="mb-4">To get started, please register a new account or log in.</p>
+            <a href="{% url 'signup' %}" class="btn btn-primary me-2">Sign up</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-secondary">Login</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
