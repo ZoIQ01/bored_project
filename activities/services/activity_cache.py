@@ -17,18 +17,6 @@ def get_activity_filter_choices():
 
     types = [value for value, _ in ActivityType.choices]
 
-    participants = list(
-        Activity.objects.order_by("participants")
-        .values_list("participants", flat=True)
-        .distinct()
-    )
-
-    price = list(
-        Activity.objects.order_by("price")
-        .values_list("price", flat=True)
-        .distinct()
-    )
-
     accessibility = list(
         Activity.objects.order_by("accessibility")
         .values_list("accessibility", flat=True)
@@ -37,8 +25,6 @@ def get_activity_filter_choices():
 
     data = {
         "types": types,
-        "participants": participants,
-        "price": price,
         "accessibility": accessibility,
     }
 
