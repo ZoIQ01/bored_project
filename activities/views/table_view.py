@@ -1,11 +1,10 @@
-"""Default activity table list view definitions."""
-
-from activities.views.base_list_view import BaseActivityListView
-
-
-class ActivitiesListView(BaseActivityListView):
-    """Expose the default activity list page."""
-    pass
+from django_filters.views import FilterView
+from activities.filters import ActivityFilterSet
+from activities.models import Activity
 
 
-activities_list = ActivitiesListView.as_view()
+class ActivitiesListView(FilterView):
+    model = Activity
+    filterset_class = ActivityFilterSet
+    template_name = "activities/activity_list.html"
+    paginate_by = 20
