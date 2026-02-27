@@ -5,6 +5,7 @@ import time
 import requests
 
 from decimal import Decimal, InvalidOperation
+from functools import cache
 
 from activities.models import Activity
 from activities.const import BORED_API_URL, DEFAULT_IMPORT_COUNT, DEFAULT_IMPORT_TIMEOUT
@@ -18,18 +19,20 @@ def import_activities(
     time_provider=None,
 ):
     """Fetch and upsert activities until count is reached or timeout expires."""
-
+    
     tp = time_provider or time.time
     start = tp()
     added = skipped = 0
+    errors = []
 
     for _ in range(count):
         try:
             response = requests.get(BORED_API_URL)
             response.raise_for_status()
             data = response.json()
-        except requests.RequestException:
+        except requests.RequestException as e:
             logger.exception("Failed to fetch activity from API")
+            errors.append("network error")
             skipped += 1
             if tp() - start > timeout:
                 break
@@ -85,4 +88,11 @@ def import_activities(
         if tp() - start > timeout:
             break
 
-    return added, skipped
+        if added > 0:
+            cache.delete("activity_filter_choices")
+
+    return {"added": added,
+        "skipped": skipped,
+        "errors": (errors),
+        "timeout_reached": tp() - start > timeout,}
+    
