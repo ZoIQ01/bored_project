@@ -1,21 +1,11 @@
 <form method="get" action="{% url 'activities_list' %}" class="card shadow-sm mb-3">
   <div class="card-body">
     <h2 class="h6 mb-3">Filters</h2>
-  {% if request.GET.sort_by %}
-    <input type="hidden" name="sort_by" value="{{ request.GET.sort_by }}">
-  {% endif %}
-  {% if request.GET.order %}
-    <input type="hidden" name="order" value="{{ request.GET.order }}">
-  {% endif %}
-  <div class="row g-3 align-items-end">
-    <div class="col-12 col-md-4 col-lg-3">
-      <label class="form-label" for="id_type">Type</label>
-      <select class="form-select" name="type" id="id_type">
-        <option value="">Any</option>
-        {% for t in types %}
-          <option value="{{ t }}" {% if request.GET.type == t %}selected{% endif %}>{{ t }}</option>
-        {% endfor %}
-      </select>
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Apply Filters</button>
+    <a href="{% url 'activities_list' %}" class="btn btn-outline-secondary">Clear</a>
+  </div>
+</form>
     </div>
 
     <div class="col-12 col-md-4 col-lg-2">
