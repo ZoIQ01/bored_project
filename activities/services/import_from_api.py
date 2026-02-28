@@ -5,7 +5,7 @@ import time
 import requests
 
 from decimal import Decimal, InvalidOperation
-from functools import cache
+from django.core.cache import cache
 
 from activities.models import Activity
 from activities.const import BORED_API_URL, DEFAULT_IMPORT_COUNT, DEFAULT_IMPORT_TIMEOUT
@@ -17,6 +17,7 @@ def import_activities(
     count=DEFAULT_IMPORT_COUNT,
     timeout=DEFAULT_IMPORT_TIMEOUT,
     time_provider=None,
+    return_meta=False,
 ):
     """Fetch and upsert activities until count is reached or timeout expires."""
     
@@ -24,6 +25,10 @@ def import_activities(
     start = tp()
     added = skipped = 0
     errors = []
+    timeout_reached = False
+
+    def timed_out():
+        return tp() - start > timeout
 
     for _ in range(count):
         try:
@@ -34,13 +39,15 @@ def import_activities(
             logger.exception("Failed to fetch activity from API")
             errors.append("network error")
             skipped += 1
-            if tp() - start > timeout:
+            if timed_out():
+                timeout_reached = True
                 break
             continue
         except ValueError:
             logger.exception("Failed to decode activity payload from API")
             skipped += 1
-            if tp() - start > timeout:
+            if timed_out():
+                timeout_reached = True
                 break
             continue
  
@@ -49,7 +56,8 @@ def import_activities(
         if key is None:
             logger.warning("Skipping activity because API payload is missing 'key': %s", data)
             skipped += 1
-            if tp() - start > timeout:
+            if timed_out():
+                timeout_reached = True
                 break
             continue
 
@@ -66,7 +74,8 @@ def import_activities(
                 raw_price,
             )
             skipped += 1
-            if tp() - start > timeout:
+            if timed_out():
+                timeout_reached = True
                 break
             continue
 
@@ -85,14 +94,22 @@ def import_activities(
         else:
             skipped += 1
 
-        if tp() - start > timeout:
+        if timed_out():
+            timeout_reached = True
             break
 
-        if added > 0:
-            cache.delete("activity_filter_choices")
+    if added > 0:
+        cache.delete("activity_filter_choices")
 
-    return {"added": added,
-        "skipped": skipped,
-        "errors": (errors),
-        "timeout_reached": tp() - start > timeout,}
+    if not return_meta:
+        return added, skipped
+
+    meta = {
+        "requested": count,
+        "attempted": added + skipped,
+        "timeout_seconds": timeout,
+        "timeout_reached": timeout_reached,
+        "errors": errors,
+    }
+    return added, skipped, meta
     

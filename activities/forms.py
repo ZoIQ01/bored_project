@@ -33,9 +33,12 @@ class ActivityFilterForm(forms.Form):
     accessibility = forms.ChoiceField(required=False, choices=[("", "Any")])
     activity = forms.CharField(required=False, max_length=255)
 
-    def __init__(self, *args, accessibility=None, **kwargs):
-        """Populate accessibility choices from database."""
+    def __init__(self, *args, types=None, accessibility=None, **kwargs):
+        """Populate choice fields from database / cached values."""
         super().__init__(*args, **kwargs)
+        self.fields["type"].choices = [("", "Any")] + [
+            (str(item), str(item)) for item in (types or [])
+        ]
         self.fields["accessibility"].choices = [("", "Any")] + [
             (str(item), str(item)) for item in (accessibility or [])
         ]

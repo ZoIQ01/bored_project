@@ -66,8 +66,6 @@ class BaseActivityListView(ListView):
         choices = self.get_choices()
 
         context["types"] = choices["types"]
-        context["participants_choices"] = choices["participants"]
-        context["price_choices"] = choices["price"]
         context["accessibility_choices"] = choices["accessibility"]
         context["form"] = self.get_filter_form()
         return context

@@ -33,6 +33,15 @@
                     </div>
                 {% endif %}
 
+                {% if timeout_reached %}
+                    <div class="alert alert-warning mt-3 mb-0" role="alert">
+                        Import stopped early due to a timeout.
+                        {% if attempted %}<strong>Attempted:</strong> {{ attempted }}{% endif %}
+                        {% if count %}&nbsp;|&nbsp;<strong>Requested:</strong> {{ count }}{% endif %}
+                        {% if timeout_seconds %}&nbsp;|&nbsp;<strong>Timeout:</strong> {{ timeout_seconds }}s{% endif %}
+                    </div>
+                {% endif %}
+
                 <p class="mt-3 mb-0"><strong>Total activities in database:</strong> {{ total }}</p>
             </div>
         </div>

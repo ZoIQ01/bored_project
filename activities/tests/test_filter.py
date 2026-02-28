@@ -65,3 +65,30 @@ class FilterActivitiesViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Enter a valid whole number for participants.")
 
+    def test_filter_activities_filters_by_accessibility(self):
+        Activity.objects.create(
+            id=30001,
+            activity="Accessible one",
+            type="education",
+            participants=1,
+            price="0.0",
+            accessibility="0.1",
+            link="",
+        )
+        Activity.objects.create(
+            id=30002,
+            activity="Accessible two",
+            type="education",
+            participants=1,
+            price="0.0",
+            accessibility="0.9",
+            link="",
+        )
+
+        url = reverse("activities_list") + "?accessibility=0.1"
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Accessible one")
+        self.assertNotContains(response, "Accessible two")
+

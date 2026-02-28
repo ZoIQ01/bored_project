@@ -1,6 +1,11 @@
 {% extends "activities/base.html" %}
+{% load static %}
 
 {% block title %}Activities{% endblock %}
+
+{% block extra_head %}
+  <script defer src="{% static 'activities/mark_done.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 {% include 'activities/filter.html' %}
@@ -9,7 +14,9 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
   <h1 class="h3 mb-0">Activities</h1>
   <div class="d-flex align-items-center gap-2">
+    <span id="done-count" class="badge text-bg-light border">Done: 0</span>
     <span class="badge text-bg-light border">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    <button id="done-clear" type="button" class="btn btn-outline-secondary btn-sm">Clear Done</button>
     <a class="btn btn-outline-secondary btn-sm" href="{% url 'activities_list' %}">Reset All</a>
   </div>
 </div>
@@ -19,6 +26,7 @@
     <table class="table table-hover align-middle mb-0">
       <thead class="table-light">
         <tr>
+          <th>done</th>
           <th>id</th>
           <th>type</th>
           <th>participants</th>
@@ -32,6 +40,16 @@
       <tbody>
         {% for a in page_obj %}
         <tr>
+          <td>
+            <input
+              class="form-check-input"
+              type="checkbox"
+              aria-label="Mark activity {{ a.id }} as done"
+              data-activity-done-toggle
+              data-activity-id="{{ a.id }}"
+            >
+            <span class="badge text-bg-success d-none" data-activity-done-badge>Done</span>
+          </td>
           <td>{{ a.id }}</td>
           <td><span class="badge text-bg-secondary">{{ a.type }}</span></td>
           <td>{{ a.participants }}</td>
@@ -48,7 +66,7 @@
         </tr>
         {% empty %}
         <tr>
-          <td colspan="7" class="text-center py-4 text-muted">Nothing found</td>
+          <td colspan="8" class="text-center py-4 text-muted">Nothing found</td>
         </tr>
         {% endfor %}
       </tbody>

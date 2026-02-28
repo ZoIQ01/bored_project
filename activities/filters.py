@@ -12,10 +12,7 @@ class ActivityFilterSet(django_filters.FilterSet):
     )
     participants = django_filters.NumberFilter(field_name="participants")
     price = django_filters.NumberFilter(field_name="price")
-    accessibility = django_filters.ChoiceFilter(
-        field_name="accessibility",
-        empty_label="Any"
-    )
+    accessibility = django_filters.CharFilter(field_name="accessibility")
     activity = django_filters.CharFilter(
         field_name="activity",
         lookup_expr="icontains",
