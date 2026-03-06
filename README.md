@@ -161,6 +161,39 @@ Test modules include:
 - `test_sort.py` - Tests for sorting activities
 - `test_random.py` - Tests for random activity selection
 
+## Running with Docker
+
+### Build image
+
+```bash
+docker build -t activity-manager .
+```
+
+### Run with Docker Compose
+
+1. Create your environment file:
+   ```bash
+   cp .env_example .env
+   ```
+
+2. Start the app:
+   ```bash
+   docker compose up --build
+   ```
+
+3. Open the app at `http://127.0.0.1:8000/`
+
+The compose setup runs migrations automatically on startup and persists SQLite data in a Docker volume.
+
+### Useful commands
+
+```bash
+docker compose down
+docker compose logs -f web
+docker compose exec web python manage.py createsuperuser
+docker compose exec web python manage.py import_activity
+```
+
 ## Configuration
 
 ### Environment Variables
